@@ -2,25 +2,25 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    [Header("Required references")]
     public TcpServer server;
-    
     public GameObject paddle;
-    public float paddleSpeed = 10f;
-    private float paddleSpeed_scaled;
-    public float paddleForce = 2f;
     public GameObject paddleBaseline;
-
     public GameObject ball;
     public Rigidbody2D ballRigidBody;
-    public float ballSpeed = 10f;
-
     public GameObject topWall;
     public GameObject bottomWall;
     public GameObject leftWall;
     public GameObject rightWall;
+
+    [Header("Gameplay parameters")]
+    [Range(1f, 100f)] public float paddleSpeed = 10f;
+    [Range(0.1f, 10f)] public float paddleForce = 2f;
+    [Range(1f, 100f)] public float ballSpeed = 10f;
+
+    private float paddleSpeed_scaled;
     private float fieldWidth;
     private float fieldDiag;
-
     private float deltaTime = 0f;
 
     void Start()

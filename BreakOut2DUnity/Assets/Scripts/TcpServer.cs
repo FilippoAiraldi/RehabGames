@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class TcpServer : MonoBehaviour
 {
+    [Header("Connection Parameters")]
     public int port = 60000;
     public string address = "127.0.0.1";
     public int waitMs = 25; // same rate at which LV writes to port
@@ -15,7 +16,6 @@ public class TcpServer : MonoBehaviour
     private CancellationTokenSource tokenSource;
 
     public float PaddleCommand { get; private set; } = 0f; // belongs to [0, 1] or -1
-
     public float PaddleActualPosition { get; set; } = 0f; // belongs to [0, 1] or -1
     public float PaddleDesiredPosition { get; set; } = 0f; // belongs to [0, 1] or -1
     public float BallDistanceFromPaddleDesiredPosition { get; set; } = 0f; // belongs to [0, 1] or -1
