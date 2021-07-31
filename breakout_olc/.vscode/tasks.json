@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "g++ build",
+            "command": "C:\\Program Files\\mingw-w64\\x86_64-7.3.0-posix-seh-rt_v5-rev0\\mingw64\\bin\\g++.exe",
+            "args": [
+                "-Wall",
+                "-g",
+                "-std=c++14",
+                "${workspaceFolder}\\main.cpp", // "${file}", // "${workspaceFolder}/*.cpp",
+                "-IC:\\Users\\WearableLab5\\Documents\\habilis_habilis++\\rehab_games\\asio-1.18.1\\include",
+                "-o",
+                "${workspaceFolder}\\main.exe",
+                "-pthread",
+                "-luser32",
+                "-lgdi32",
+                "-lgdiplus",
+                "-lopengl32",
+                "-lShlwapi",
+                "-ldwmapi",
+                "-lstdc++fs",
+                "-lws2_32",
+                "-lwsock32"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "compiler: C:\\Program Files\\mingw-w64\\x86_64-7.3.0-posix-seh-rt_v5-rev0\\mingw64\\bin\\g++.exe",
+            "presentation": {
+                "clear": true
+            }
+        }
+    ]
+}
