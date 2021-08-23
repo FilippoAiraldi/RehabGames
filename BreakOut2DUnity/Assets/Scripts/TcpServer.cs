@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Threading;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class TcpServer : MonoBehaviour
 {
     [Header("Connection Parameters")]

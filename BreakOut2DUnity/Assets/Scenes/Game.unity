@@ -277,10 +277,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   server: {fileID: 387500203}
   paddle: {fileID: 1303647511}
+  paddleBaseline: {fileID: 588364192}
   ball: {fileID: 1714308753}
+  brick: {fileID: 704167733236116551, guid: 42c9f9c5bc138e14e8c044879b293889, type: 3}
+  topWall: {fileID: 338176097}
+  leftWall: {fileID: 22631171}
+  rightWall: {fileID: 1885918998}
   paddleSpeed: 10
   paddleForce: 2
   ballSpeed: 10
+  ballStartHeight: -7.5
+  ballStartMaxRandomAngle: 10
+  bricksMargin: 0.25
 --- !u!1 &338176097
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,7 +493,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 87
   orthographic: 1
   orthographic size: 10
   m_Depth: -1
@@ -608,7 +616,6 @@ MonoBehaviour:
   paddleBaseline: {fileID: 588364192}
   ball: {fileID: 1714308753}
   topWall: {fileID: 338176097}
-  bottomWall: {fileID: 1639817076}
   leftWall: {fileID: 22631171}
   rightWall: {fileID: 1885918998}
 --- !u!4 &894085765
@@ -734,14 +741,15 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.2, y: 0.5}
+    - - {x: 0.0003315806, y: 0.5}
+      - {x: -0.23780094, y: 0.4403143}
       - {x: -0.35, y: 0.4}
       - {x: -0.5, y: 0.3}
       - {x: -0.5, y: -0.5}
       - {x: 0.5, y: -0.5}
       - {x: 0.5, y: 0.3}
       - {x: 0.35, y: 0.4}
-      - {x: 0.2, y: 0.5}
+      - {x: 0.20596859, y: 0.47612572}
 --- !u!50 &1303647516
 Rigidbody2D:
   serializedVersion: 4

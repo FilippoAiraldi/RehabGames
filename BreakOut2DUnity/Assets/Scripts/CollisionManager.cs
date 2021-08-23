@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class CollisionManager : MonoBehaviour
 {
     [Header("Required references")]
     public TcpServer server;
     public GameObject paddle;
-    public GameObject paddleBaseline
+    public GameObject paddleBaseline;
     public Rigidbody2D ball;
     public GameObject topWall;
-    public GameObject bottomWall;
     public GameObject leftWall;
     public GameObject rightWall;
 
@@ -24,7 +22,6 @@ public class CollisionManager : MonoBehaviour
         Debug.Assert(this.paddleBaseline != null, "Collision manager paddle baseline expected to be non-null");
         Debug.Assert(this.ball != null, "Collision manager ball rigid body expected to be non-null");
         Debug.Assert(this.topWall != null, "Collision manager top wall expected to be non-null");
-        Debug.Assert(this.bottomWall != null, "Collision manager bottom wall expected to be non-null");
         Debug.Assert(this.leftWall != null, "Collision manager left wall expected to be non-null");
         Debug.Assert(this.rightWall != null, "Collision manager right wall expected to be non-null");
 
