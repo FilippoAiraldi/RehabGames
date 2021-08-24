@@ -18,13 +18,12 @@ public class GameController : MonoBehaviour
     [Range(1f, 100f)] public float paddleSpeed = 10f;
     [Range(0.1f, 10f)] public float paddleForce = 2f;
     [Range(1f, 100f)] public float ballSpeed = 10f;
-    [Range(-7.5f, -3f)] public float ballStartHeight = -7.5f;
-    [Range(0f, 45f)] public float ballStartMaxRandomAngle = 10f;
-    public float bricksMargin = 0.0f;
+    [Range(0f, 45f)] public float ballStartMaxRngAngle = 10f;
+    public float bricksMargin = 0.25f;
 
     private float paddleSpeed_scaled;
     private float deltaTime = 0.25f;
-    private List<GameObject> bricks = new List<GameObject>(100);
+    private readonly List<GameObject> bricks = new List<GameObject>(100);
 
     void Start()
     {
@@ -37,8 +36,8 @@ public class GameController : MonoBehaviour
         Debug.Assert(this.leftWall != null, "Collision manager left wall expected to be non-null");
         Debug.Assert(this.rightWall != null, "Collision manager right wall expected to be non-null");
 
-        this.createBricksLayout();
-        this.RespawnBall();
+        this.SpawnBricks();
+        this.SpawnBall();
     }
 
     void Update()
@@ -62,7 +61,17 @@ public class GameController : MonoBehaviour
         GUI.Label(new Rect(6, Screen.height - 20, 300, 60), s, fontSize);
     }
 
-    private void createBricksLayout()
+    public void SpawnBall()
+    {
+        this.ball.position = new Vector2(this.paddle.transform.position.x,
+            this.paddle.transform.position.y + (this.paddle.transform.localScale.y + this.ball.transform.localScale.x) / 2f);
+        const float meanAngle = 90 * Mathf.Deg2Rad;
+        var aperture = this.ballStartMaxRngAngle * Mathf.Deg2Rad;
+        var angle = Random.Range(meanAngle - aperture, meanAngle + aperture);
+        this.ball.velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * this.ballSpeed;
+    }
+
+    private void SpawnBricks()
     {
         // compute dimensions of field
         var width = this.rightWall.transform.position.x - this.leftWall.transform.position.x 
@@ -79,7 +88,7 @@ public class GameController : MonoBehaviour
         var wallToBrickVerMargin = (height - nVerBricks * brickSize.height - (nVerBricks - 1) * this.bricksMargin) / 2f;
 
         // populate of bricks
-        this.bricks.Clear();
+        this.ClearBricks();
         var startX = this.leftWall.transform.position.x + this.leftWall.transform.localScale.x / 2f + wallToBrickHorMargin + brickSize.width / 2;
         var startY = this.topWall.transform.position.y - this.topWall.transform.localScale.y / 2f - wallToBrickVerMargin - brickSize.height / 2;
         for (var i = 1; i < nHorBricks - 1; ++i)
@@ -92,17 +101,12 @@ public class GameController : MonoBehaviour
                 this.bricks.Add(b);
             }
         }
-
     }
 
-    private void RespawnBall()
+    private void ClearBricks()
     {
-        this.ball.position = new Vector2(0, this.ballStartHeight);
-
-        const float meanAngle = 90 * Mathf.Deg2Rad;
-        var aperture = this.ballStartMaxRandomAngle * Mathf.Deg2Rad;
-        var angle = Random.Range(meanAngle - aperture, meanAngle + aperture);
-        this.ball.velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * this.ballSpeed;
+        this.bricks.ForEach(b => Destroy(b));
+        this.bricks.Clear();
     }
 
     private float GetPaddleCommand() => -Mathf.Lerp(-this.paddleForce, this.paddleForce, this.server.PaddleCommand);

@@ -50,7 +50,7 @@ public class CollisionManager : MonoBehaviour
 
     private (float pos, float desPos, float normDist) ComputePaddleActualAndDesiredPositionAndDistance()
     {
-        const int maxCollisionIterations = 15;
+        const int maxCollisionIterations = 20;
         const int collidableLayerMask = 1 << 6;
 
         var paddlePos = this.NormalizedPaddlePosition(this.paddle.transform.position.x);
