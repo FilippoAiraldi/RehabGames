@@ -72,7 +72,7 @@ public class CollisionManager : MonoBehaviour
                 // from the hit centroid, extract the desired paddle position and the distance 
                 var xHit = Mathf.Clamp(hit.centroid.x, -this.fieldWidth / 2f, this.fieldWidth / 2f);
                 var paddleDesiredPos = this.NormalizedPaddlePosition(xHit);
-                var ballHittingPaddlePos = new Vector2(this.paddle.transform.position.x, this.paddle.transform.position.y + this.paddle.transform.localScale.y / 2f + ballRadius);
+                var ballHittingPaddlePos = (Vector2)this.paddle.transform.position + new Vector2(0, this.paddle.transform.localScale.y / 2f + ballRadius);
                 var dist = (this.ball.position - ballHittingPaddlePos).magnitude / this.fieldDiag;
                 return (paddlePos, paddleDesiredPos, dist);
             }

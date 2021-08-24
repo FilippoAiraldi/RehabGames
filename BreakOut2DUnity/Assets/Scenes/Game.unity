@@ -287,7 +287,7 @@ MonoBehaviour:
   paddleForce: 2
   ballSpeed: 10
   ballStartMaxRngAngle: 10
-  bricksMargin: 0.4
+  bricksMargin: 0.35
 --- !u!1 &338176097
 GameObject:
   m_ObjectHideFlags: 0
