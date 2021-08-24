@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 [DisallowMultipleComponent]
 public class GameController : MonoBehaviour
@@ -27,26 +30,23 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        Debug.Assert(this.server != null, "Controller server expected to be non-null");
-        Debug.Assert(this.paddle != null, "Controller paddle expected to be non-null");
-        Debug.Assert(this.paddle != null, "Controller paddle baseline expected to be non-null");
-        Debug.Assert(this.ball != null, "Controller ball rigid body expected to be non-null");
-        Debug.Assert(this.brick != null, "Controller ball brick expected to be non-null");
-        Debug.Assert(this.topWall != null, "Collision manager top wall expected to be non-null");
-        Debug.Assert(this.leftWall != null, "Collision manager left wall expected to be non-null");
-        Debug.Assert(this.rightWall != null, "Collision manager right wall expected to be non-null");
-
         this.SpawnBricks();
-        this.SpawnBall();
+        _ = this.SpawnBall();
     }
 
     void Update()
     {
+        // increase time for FPS computation
         this.deltaTime += (Time.unscaledDeltaTime - this.deltaTime) * 0.1f;
 
+        // get paddle command
         this.paddleSpeed_scaled = (this.server.IsClientConnected
               ? this.GetPaddleCommand()
               : (Input.GetAxisRaw("Horizontal") * 2f)) * Time.deltaTime * this.paddleSpeed;
+
+        // check if user wants to exit
+        if (Input.GetKey(KeyCode.Escape))
+            SceneManager.LoadSceneAsync("Menu");
     }
 
     void FixedUpdate() => this.paddle.transform.Translate(this.paddleSpeed_scaled, 0, 0);
@@ -61,10 +61,15 @@ public class GameController : MonoBehaviour
         GUI.Label(new Rect(6, Screen.height - 20, 300, 60), s, fontSize);
     }
 
-    public void SpawnBall()
+    public async Task SpawnBall()
     {
+        // halt ball
         this.ball.position = new Vector2(this.paddle.transform.position.x,
             this.paddle.transform.position.y + (this.paddle.transform.localScale.y + this.ball.transform.localScale.x) / 2f);
+        this.ball.velocity = Vector2.zero;
+
+        // start 3s timer here - after which start the ball
+        await Task.Delay(1500);
         const float meanAngle = 90 * Mathf.Deg2Rad;
         var aperture = this.ballStartMaxRngAngle * Mathf.Deg2Rad;
         var angle = Random.Range(meanAngle - aperture, meanAngle + aperture);
@@ -75,10 +80,9 @@ public class GameController : MonoBehaviour
     {
         this.bricks.Remove(brickHit);
         Destroy(brickHit);
+
         if (this.bricks.Count == 0)
-        {
-            // end game...
-        }
+            SceneManager.LoadSceneAsync("Menu");
     }
 
     private void SpawnBricks()

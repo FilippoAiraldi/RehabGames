@@ -1,4 +1,6 @@
+using UnityEditor;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 [DisallowMultipleComponent]
 public class CollisionManager : MonoBehaviour
@@ -15,24 +17,11 @@ public class CollisionManager : MonoBehaviour
     private float fieldWidth;
     private float fieldDiag;
 
-    void Start()
-    {
-        Debug.Assert(this.server != null, "Collision manager server expected to be non-null");
-        Debug.Assert(this.paddle != null, "Collision manager paddle expected to be non-null");
-        Debug.Assert(this.paddleBaseline != null, "Collision manager paddle baseline expected to be non-null");
-        Debug.Assert(this.ball != null, "Collision manager ball rigid body expected to be non-null");
-        Debug.Assert(this.topWall != null, "Collision manager top wall expected to be non-null");
-        Debug.Assert(this.leftWall != null, "Collision manager left wall expected to be non-null");
-        Debug.Assert(this.rightWall != null, "Collision manager right wall expected to be non-null");
+    void Start() => (this.fieldWidth, this.fieldDiag) = this.ComputeFieldDimensions();
 
-        (this.fieldWidth, this.fieldDiag) = this.ComputeFieldDimensions();
-    }
-
-    void Update()
-    {
-        (this.server.PaddleActualPosition, this.server.PaddleDesiredPosition, this.server.BallDistanceFromPaddleDesiredPosition) =
-            this.ComputePaddleActualAndDesiredPositionAndDistance();
-    }
+    void Update() => 
+        (this.server.PaddleActualPosition, this.server.PaddleDesiredPosition, this.server.BallDistanceFromPaddleDesiredPosition)
+            = this.ComputePaddleActualAndDesiredPositionAndDistance();
 
     public (float width, float diag) ComputeFieldDimensions()
     {
@@ -62,7 +51,6 @@ public class CollisionManager : MonoBehaviour
         {
             // get next collision
             var hit = Physics2D.CircleCast(start, ballRadius, dir, this.fieldDiag, collidableLayerMask);
-            Debug.Assert(hit.collider != null, "no collider found!");
             Debug.DrawLine(start, hit.centroid, Color.magenta);
 
             // check the collided object
