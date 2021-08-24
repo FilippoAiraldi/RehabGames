@@ -279,7 +279,7 @@ MonoBehaviour:
   paddle: {fileID: 1303647511}
   paddleBaseline: {fileID: 588364192}
   ball: {fileID: 1714308753}
-  brick: {fileID: 704167733236116551, guid: 42c9f9c5bc138e14e8c044879b293889, type: 3}
+  brick: {fileID: 6753508232839160561, guid: 42c9f9c5bc138e14e8c044879b293889, type: 3}
   topWall: {fileID: 338176097}
   leftWall: {fileID: 22631171}
   rightWall: {fileID: 1885918998}

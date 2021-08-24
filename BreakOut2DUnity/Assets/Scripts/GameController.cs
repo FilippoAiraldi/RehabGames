@@ -9,7 +9,7 @@ public class GameController : MonoBehaviour
     public GameObject paddle;
     public GameObject paddleBaseline;
     public Rigidbody2D ball;
-    public GameObject brick;
+    public Brick brick;
     public GameObject topWall;
     public GameObject leftWall;
     public GameObject rightWall;
@@ -71,6 +71,16 @@ public class GameController : MonoBehaviour
         this.ball.velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * this.ballSpeed;
     }
 
+    public void NotifyBrickHit(GameObject brickHit)
+    {
+        this.bricks.Remove(brickHit);
+        Destroy(brickHit);
+        if (this.bricks.Count == 0)
+        {
+            // end game...
+        }
+    }
+
     private void SpawnBricks()
     {
         // compute dimensions of field
@@ -98,7 +108,8 @@ public class GameController : MonoBehaviour
             {
                 var py = startY - j * (brickSize.height + this.bricksMargin);
                 var b = Instantiate(this.brick, new Vector3(px, py), Quaternion.identity);
-                this.bricks.Add(b);
+                b.Controller = this;
+                this.bricks.Add(b.gameObject);
             }
         }
     }
