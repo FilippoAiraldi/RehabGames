@@ -11,7 +11,7 @@ public class MenuManager : MonoBehaviour
 
     void Start()
     {
-        this.playButton.onClick.AddListener(() => SceneManager.LoadSceneAsync("Game"));
+        this.playButton.onClick.AddListener(() => SceneManager.LoadScene("Game"));
         this.quitButton.onClick.AddListener(() => Application.Quit());
     }
 
