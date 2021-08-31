@@ -1,0 +1,12 @@
+{
+	"TcpAddress": "127.0.0.1",
+	"TcpPort": 60000,
+	"TcpReadWriteIntervalMs": 25,
+	
+	"PaddleSpeed": 10,
+	"PaddleForce": 2,
+	"BallSpeed": 10,
+	"BallMaxRngStartAngle": 10,
+	
+	"BricksMargin": 0.25
+}

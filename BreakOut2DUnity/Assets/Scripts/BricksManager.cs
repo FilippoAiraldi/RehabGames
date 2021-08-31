@@ -12,11 +12,16 @@ public class BricksManager : MonoBehaviour
     public GameObject rightWall;
 
     [Header("Gameplay parameters")]
-    public float bricksMargin = 0.25f;
+    private float bricksMargin = 0.25f;
 
     private readonly List<GameObject> bricks = new List<GameObject>(100);
 
-    void Start() => this.SpawnBricks();
+    void Start()
+    {
+        this.bricksMargin = MenuManager.Config.BricksMargin;
+
+        this.SpawnBricks();
+    }
 
     public void NotifyBrickHit(GameObject brickHit)
     {

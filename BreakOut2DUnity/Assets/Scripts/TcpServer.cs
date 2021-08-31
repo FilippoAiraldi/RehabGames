@@ -8,9 +8,9 @@ using UnityEngine;
 public class TcpServer : MonoBehaviour
 {
     [Header("Connection Parameters")]
-    public int port = 60000;
-    public string address = "127.0.0.1";
-    public int waitMs = 25; // same rate at which LV writes to port
+    private string address = "127.0.0.1";
+    private int port = 60000;
+    private int waitMs = 25; // same rate at which LV writes to port
 
     private TcpListener listener;
     private Thread thread;
@@ -24,6 +24,10 @@ public class TcpServer : MonoBehaviour
 
     void Start()
     {
+        this.address = MenuManager.Config.TcpAddress;
+        this.port = MenuManager.Config.TcpPort;
+        this.waitMs = MenuManager.Config.TcpReadWriteIntervalMs;
+
         this.tokenSource = new CancellationTokenSource();
         this.thread = new Thread(() => this.Run(this.tokenSource.Token)) { IsBackground = true };
         this.thread.Start();
