@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 public class Brick : MonoBehaviour
 {
     public BricksManager Manager { private get; set; }

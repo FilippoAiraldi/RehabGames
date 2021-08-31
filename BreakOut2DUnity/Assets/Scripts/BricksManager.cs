@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class BricksManager : MonoBehaviour
 {
     [Header("Required references")]

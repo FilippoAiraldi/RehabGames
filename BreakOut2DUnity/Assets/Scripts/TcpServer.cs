@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using System.Threading;
 using UnityEngine;
 
-[DisallowMultipleComponent]
 public class TcpServer : MonoBehaviour
 {
     [Header("Connection Parameters")]
@@ -22,8 +21,15 @@ public class TcpServer : MonoBehaviour
     public float BallDistanceFromPaddleDesiredPosition { get; set; } = 0f; // belongs to [0, 1] or -1
     public bool IsClientConnected { get; private set; } = false;
 
+    private static bool serverAlreadyLoaded = false;
+
     void Start()
     {
+        if (serverAlreadyLoaded) return;
+        serverAlreadyLoaded = true;
+
+        DontDestroyOnLoad(this.gameObject);
+
         this.address = MenuManager.Config.TcpAddress;
         this.port = MenuManager.Config.TcpPort;
         this.waitMs = MenuManager.Config.TcpReadWriteIntervalMs;
@@ -101,6 +107,7 @@ public class TcpServer : MonoBehaviour
         finally
         {
             this.listener.Stop();
+            //Destroy(this.gameObject);
         }
     }
 

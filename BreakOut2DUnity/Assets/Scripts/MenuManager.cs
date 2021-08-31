@@ -26,6 +26,7 @@ public class MenuManager : MonoBehaviour
     [Header("Required references")]
     public Button playButton;
     public Button quitButton;
+    public TcpServer server;
 
     private string configErrorMsg = string.Empty;
 
@@ -43,11 +44,16 @@ public class MenuManager : MonoBehaviour
 
     void OnGUI()
     {
-        if (string.IsNullOrEmpty(this.configErrorMsg))
-            return;
-        
+        var yoffset = 20;
+        var txt = this.server.IsClientConnected ? "Client connected." : "No client connected.";
+        if (!string.IsNullOrEmpty(this.configErrorMsg))
+        {
+            yoffset *= 2;
+            txt += "\n" + this.configErrorMsg;
+        }
+
         var font = new GUIStyle(GUI.skin.GetStyle("label")) { fontSize = 11 };
-        GUI.Label(new Rect(6, Screen.height - 20, 750, 60), this.configErrorMsg, font);
+        GUI.Label(new Rect(6, Screen.height - yoffset, 1000, 60), txt, font);
     }
 
     private bool ReadAndCheckConfigJson(string path, out GameConfig config, out string error)

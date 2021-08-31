@@ -261,7 +261,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 750856687}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &86681983
 MonoBehaviour:
@@ -275,13 +275,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efabb69edeb3939428b9eb46b554ae49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  server: {fileID: 387500203}
+  server: {fileID: 0}
   paddle: {fileID: 1303647511}
   ball: {fileID: 1714308753}
-  paddleSpeed: 10
-  paddleForce: 2
-  ballSpeed: 10
-  ballStartMaxRngAngle: 10
 --- !u!1 &338176097
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,52 +394,6 @@ PolygonCollider2D:
       - {x: 0.47, y: -0.8}
       - {x: 0.5, y: -0.5}
       - {x: 0.5, y: 0.5}
---- !u!1 &387500201
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 387500202}
-  - component: {fileID: 387500203}
-  m_Layer: 0
-  m_Name: TcpServer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &387500202
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 387500201}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.1613624, y: 11.196993, z: 15.076573}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 750856687}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &387500203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 387500201}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38a24e7e9ce454a4298f68547ef3526e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 60000
-  address: 127.0.0.1
-  waitMs: 25
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,7 +559,6 @@ MonoBehaviour:
   topWall: {fileID: 338176097}
   leftWall: {fileID: 22631171}
   rightWall: {fileID: 1885918998}
-  bricksMargin: 0.25
 --- !u!4 &713748947
 Transform:
   m_ObjectHideFlags: 0
@@ -622,7 +571,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 750856687}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &750856686
 GameObject:
@@ -651,7 +600,6 @@ Transform:
   m_LocalPosition: {x: 2.1613624, y: -0.19699332, z: -15.076573}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 387500202}
   - {fileID: 86681982}
   - {fileID: 894085765}
   - {fileID: 713748947}
@@ -687,7 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac21423accb384449a70325197e3285c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  server: {fileID: 387500203}
+  server: {fileID: 0}
   paddle: {fileID: 1303647511}
   paddleBaseline: {fileID: 588364192}
   ball: {fileID: 1714308753}
@@ -706,7 +654,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 750856687}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1303647511
 GameObject:

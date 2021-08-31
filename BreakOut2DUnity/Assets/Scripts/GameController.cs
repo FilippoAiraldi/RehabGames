@@ -3,11 +3,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-[DisallowMultipleComponent]
 public class GameController : MonoBehaviour
 {
     [Header("Required references")]
-    public TcpServer server;
+    private TcpServer server;
     public GameObject paddle;
     public Rigidbody2D ball;
 
@@ -23,6 +22,8 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        this.server = FindObjectOfType<TcpServer>();
+
         this.paddleSpeed = MenuManager.Config.PaddleSpeed;
         this.paddleForce = MenuManager.Config.PaddleForce;
         this.ballSpeed = MenuManager.Config.BallSpeed;
@@ -50,12 +51,12 @@ public class GameController : MonoBehaviour
 
     void OnGUI()
     { 
-        var s = $"{1f / this.deltaTime:00.0} FPS. ";
+        var s = $"{1f / this.deltaTime:00.0} FPS.\n";
         s += this.server.IsClientConnected
              ? $"Command = {this.GetPaddleCommand():+0.0;-0.0;0.0}"
              : "No client connected.";
         var font = new GUIStyle(GUI.skin.GetStyle("label")) { fontSize = 11 };
-        GUI.Label(new Rect(6, Screen.height - 20, 300, 60), s, font);
+        GUI.Label(new Rect(6, Screen.height - 40, 300, 60), s, font);
     }
 
     public async Task SpawnBall()

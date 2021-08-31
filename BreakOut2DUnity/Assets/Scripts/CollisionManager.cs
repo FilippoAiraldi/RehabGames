@@ -1,10 +1,10 @@
 using UnityEngine;
 
-[DisallowMultipleComponent]
+
 public class CollisionManager : MonoBehaviour
 {
     [Header("Required references")]
-    public TcpServer server;
+    private TcpServer server;
     public GameObject paddle;
     public GameObject paddleBaseline;
     public Rigidbody2D ball;
@@ -15,7 +15,12 @@ public class CollisionManager : MonoBehaviour
     private float fieldWidth;
     private float fieldDiag;
 
-    void Start() => (this.fieldWidth, this.fieldDiag) = this.ComputeFieldDimensions();
+    void Start()
+    {
+        this.server = FindObjectOfType<TcpServer>();
+        
+        (this.fieldWidth, this.fieldDiag) = this.ComputeFieldDimensions();
+    }
 
     void Update() => 
         (this.server.PaddleActualPosition, this.server.PaddleDesiredPosition, this.server.BallDistanceFromPaddleDesiredPosition)
