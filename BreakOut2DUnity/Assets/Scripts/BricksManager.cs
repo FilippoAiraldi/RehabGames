@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Timers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class BricksManager : MonoBehaviour
@@ -11,23 +13,40 @@ public class BricksManager : MonoBehaviour
     public GameObject topWall;
     public GameObject leftWall;
     public GameObject rightWall;
+    public Text scoreText;
 
     [Header("Gameplay parameters")]
     private float bricksMargin = 0.25f;
 
     private readonly List<GameObject> bricks = new List<GameObject>(100);
+    private float score;
+    private float pointsPerBlock;
+    private float pointsPerSecond;
+
+    private Timer timer;
 
     void Start()
     {
         this.bricksMargin = MenuManager.Config.BricksMargin;
-
+        this.pointsPerBlock = MenuManager.Config.PointsPerBlock;
+        this.pointsPerSecond = MenuManager.Config.PointsPerSecond;
+        this.score = 0f;
+        
         this.SpawnBricks();
+
+        // start timer
+        this.timer = new Timer(1000);
+        this.timer.Elapsed += OnTimedEvent;
+        this.timer.AutoReset = this.timer.Enabled = true;
     }
+
+    void Update() => this.scoreText.text = this.score.ToString("F2");
 
     public void NotifyBrickHit(GameObject brickHit)
     {
         this.bricks.Remove(brickHit);
         Destroy(brickHit);
+        this.score += this.pointsPerBlock;
 
         if (this.bricks.Count == 0)
             SceneManager.LoadSceneAsync("Menu");
@@ -72,5 +91,17 @@ public class BricksManager : MonoBehaviour
     {
         this.bricks.ForEach(b => Destroy(b));
         this.bricks.Clear();
+    }
+
+    private void OnTimedEvent(object sender, ElapsedEventArgs e)
+    {
+        this.score = Mathf.Max(0, this.score + this.pointsPerSecond);
+    }
+
+    private void OnDestroy()
+    {
+        this.timer.Elapsed -= OnTimedEvent;
+        this.timer.Stop();
+        this.timer.Dispose();
     }
 }

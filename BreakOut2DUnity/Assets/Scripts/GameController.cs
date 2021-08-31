@@ -16,9 +16,8 @@ public class GameController : MonoBehaviour
     private float ballSpeed = 10f;
     private float ballStartMaxRngAngle = 10f;
 
-
     private float paddleSpeed_scaled;
-    private float deltaTime = 0.25f;
+    private float deltaTime = 0f;
 
     void Start()
     {

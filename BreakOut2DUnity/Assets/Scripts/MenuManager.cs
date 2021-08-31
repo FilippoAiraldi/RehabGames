@@ -20,6 +20,9 @@ public class GameConfig
     public float BricksMargin;
 
     public int MaxCollisionPredictionIters;
+
+    public float PointsPerBlock;
+    public float PointsPerSecond;
 }
 
 

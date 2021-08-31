@@ -10,5 +10,8 @@
 	
 	"BricksMargin": 0.25,
 	
-	"MaxCollisionPredictionIters": 20
+	"MaxCollisionPredictionIters": 20,
+	
+	"PointsPerBlock": 10,
+	"PointsPerSecond": -0.2
 }
