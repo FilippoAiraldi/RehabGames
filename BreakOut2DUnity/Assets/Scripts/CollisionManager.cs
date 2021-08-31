@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 
@@ -14,11 +15,12 @@ public class CollisionManager : MonoBehaviour
 
     private float fieldWidth;
     private float fieldDiag;
+    private int maxCollisionIterations; 
 
     void Start()
     {
         this.server = FindObjectOfType<TcpServer>();
-        
+        this.maxCollisionIterations = MenuManager.Config.MaxCollisionPredictionIters;
         (this.fieldWidth, this.fieldDiag) = this.ComputeFieldDimensions();
     }
 
@@ -42,7 +44,6 @@ public class CollisionManager : MonoBehaviour
 
     private (float pos, float desPos, float normDist) ComputePaddleActualAndDesiredPositionAndDistance()
     {
-        const int maxCollisionIterations = 20;
         const int collidableLayerMask = 1 << 6;
 
         var paddlePos = this.NormalizedPaddlePosition(this.paddle.transform.position.x);
@@ -50,29 +51,32 @@ public class CollisionManager : MonoBehaviour
 
         var start = this.ball.position;
         var dir = this.ball.velocity.normalized;
-        for (var i = 0; i < maxCollisionIterations; ++i)
+        if (dir != Vector2.zero) 
         {
-            // get next collision
-            var hit = Physics2D.CircleCast(start, ballRadius, dir, this.fieldDiag, collidableLayerMask);
-            Debug.DrawLine(start, hit.centroid, Color.magenta);
+            for (var i = 0; i < maxCollisionIterations; ++i)
+            {
+                // get next collision
+                var hit = Physics2D.CircleCast(start, ballRadius, dir, this.fieldDiag, collidableLayerMask);
+                Debug.DrawLine(start, hit.centroid, Color.magenta);
 
-            // check the collided object
-            var hitObject = hit.collider.gameObject;
-            if (hitObject == this.paddleBaseline || hitObject == this.paddle)
-            {
-                // from the hit centroid, extract the desired paddle position and the distance 
-                var xHit = Mathf.Clamp(hit.centroid.x, -this.fieldWidth / 2f, this.fieldWidth / 2f);
-                var paddleDesiredPos = this.NormalizedPaddlePosition(xHit);
-                var ballHittingPaddlePos = (Vector2)this.paddle.transform.position + new Vector2(0, this.paddle.transform.localScale.y / 2f + ballRadius);
-                var dist = (this.ball.position - ballHittingPaddlePos).magnitude / this.fieldDiag;
-                return (paddlePos, paddleDesiredPos, dist);
-            }
-            else
-            {
-                // propagate collision
-                var n = hit.normal;
-                dir = (dir - 2 * (Vector2.Dot(dir, n)) * n).normalized;
-                start = hit.centroid + 0.015f * dir;
+                // check the collided object
+                var hitObject = hit.collider.gameObject;
+                if (hitObject == this.paddleBaseline || hitObject == this.paddle)
+                {
+                    // from the hit centroid, extract the desired paddle position and the distance 
+                    var xHit = Mathf.Clamp(hit.centroid.x, -this.fieldWidth / 2f, this.fieldWidth / 2f);
+                    var paddleDesiredPos = this.NormalizedPaddlePosition(xHit);
+                    var ballHittingPaddlePos = (Vector2)this.paddle.transform.position + new Vector2(0, this.paddle.transform.localScale.y / 2f + ballRadius);
+                    var dist = (this.ball.position - ballHittingPaddlePos).magnitude / this.fieldDiag;
+                    return (paddlePos, paddleDesiredPos, dist);
+                }
+                else
+                {
+                    // propagate collision
+                    var n = hit.normal;
+                    dir = (dir - 2 * (Vector2.Dot(dir, n)) * n).normalized;
+                    start = hit.centroid + 0.015f * dir;
+                }
             }
         }
 

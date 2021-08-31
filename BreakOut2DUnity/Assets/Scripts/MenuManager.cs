@@ -18,6 +18,8 @@ public class GameConfig
     public float BallMaxRngStartAngle;
 
     public float BricksMargin;
+
+    public int MaxCollisionPredictionIters;
 }
 
 
@@ -59,7 +61,6 @@ public class MenuManager : MonoBehaviour
     private bool ReadAndCheckConfigJson(string path, out GameConfig config, out string error)
     {
         config = null;
-        error = null;
 
         if (!File.Exists(path))
         {
