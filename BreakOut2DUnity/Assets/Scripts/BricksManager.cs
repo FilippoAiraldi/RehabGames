@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Timers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -42,14 +43,17 @@ public class BricksManager : MonoBehaviour
 
     void Update() => this.scoreText.text = score.ToString("F0");
 
-    public void NotifyBrickHit(GameObject brickHit)
+    public async Task NotifyBrickHit(GameObject brickHit)
     {
         this.bricks.Remove(brickHit);
         Destroy(brickHit);
         score += this.pointsPerBlock;
 
-        if (this.bricks.Count == 0)
-            SceneManager.LoadSceneAsync("Menu");
+        if (this.bricks.Count == 59)
+        {
+            await Task.Delay(250);
+            SceneManager.LoadSceneAsync("Win");
+        }
     }
 
     private void SpawnBricks(bool clean = true)
