@@ -19,18 +19,18 @@ public class BricksManager : MonoBehaviour
     private float bricksMargin = 0.25f;
 
     private readonly List<GameObject> bricks = new List<GameObject>(100);
-    private float score;
+    private Timer timer;
+    
     private float pointsPerBlock;
     private float pointsPerSecond;
-
-    private Timer timer;
+    public static float score;
 
     void Start()
     {
         this.bricksMargin = MenuManager.Config.BricksMargin;
         this.pointsPerBlock = MenuManager.Config.PointsPerBlock;
         this.pointsPerSecond = MenuManager.Config.PointsPerSecond;
-        this.score = 0f;
+        score = 0f;
         
         this.SpawnBricks();
 
@@ -40,13 +40,13 @@ public class BricksManager : MonoBehaviour
         this.timer.AutoReset = this.timer.Enabled = true;
     }
 
-    void Update() => this.scoreText.text = this.score.ToString("F2");
+    void Update() => this.scoreText.text = score.ToString("F0");
 
     public void NotifyBrickHit(GameObject brickHit)
     {
         this.bricks.Remove(brickHit);
         Destroy(brickHit);
-        this.score += this.pointsPerBlock;
+        score += this.pointsPerBlock;
 
         if (this.bricks.Count == 0)
             SceneManager.LoadSceneAsync("Menu");
@@ -95,7 +95,7 @@ public class BricksManager : MonoBehaviour
 
     private void OnTimedEvent(object sender, ElapsedEventArgs e)
     {
-        this.score = Mathf.Max(0, this.score + this.pointsPerSecond);
+        score = Mathf.Max(0, score + this.pointsPerSecond);
     }
 
     private void OnDestroy()
