@@ -49,7 +49,7 @@ public class BricksManager : MonoBehaviour
         Destroy(brickHit);
         score += this.pointsPerBlock;
 
-        if (this.bricks.Count == 59)
+        if (this.bricks.Count <= 0)
         {
             await Task.Delay(250);
             SceneManager.LoadSceneAsync("Win");
