@@ -23,6 +23,7 @@ public class GameConfig
 
     public float PointsPerBlock;
     public float PointsPerSecond;
+    public float PointsPerDeath;
 }
 
 
@@ -57,7 +58,7 @@ public class MenuManager : MonoBehaviour
             txt += "\n" + this.configErrorMsg;
         }
 
-        var font = new GUIStyle(GUI.skin.GetStyle("label")) { fontSize = 11 };
+        var font = new GUIStyle(GUI.skin.GetStyle("label")) { fontSize = 17 };
         GUI.Label(new Rect(6, Screen.height - yoffset, 1000, 60), txt, font);
     }
 

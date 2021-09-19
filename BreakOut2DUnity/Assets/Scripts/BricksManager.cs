@@ -24,6 +24,7 @@ public class BricksManager : MonoBehaviour
     
     private float pointsPerBlock;
     private float pointsPerSecond;
+    private float pointPerDeath;
     public static float score;
 
     void Start()
@@ -31,13 +32,14 @@ public class BricksManager : MonoBehaviour
         this.bricksMargin = MenuManager.Config.BricksMargin;
         this.pointsPerBlock = MenuManager.Config.PointsPerBlock;
         this.pointsPerSecond = MenuManager.Config.PointsPerSecond;
+        this.pointPerDeath = MenuManager.Config.PointsPerDeath;
         score = 0f;
         
         this.SpawnBricks();
 
         // start timer
         this.timer = new Timer(1000);
-        this.timer.Elapsed += OnTimedEvent;
+        this.timer.Elapsed += NotifySecondElapsed;
         this.timer.AutoReset = this.timer.Enabled = true;
     }
 
@@ -47,7 +49,7 @@ public class BricksManager : MonoBehaviour
     {
         this.bricks.Remove(brickHit);
         Destroy(brickHit);
-        score += this.pointsPerBlock;
+        score = Mathf.Max(0, score + this.pointsPerBlock);
 
         if (this.bricks.Count <= 0)
         {
@@ -55,6 +57,10 @@ public class BricksManager : MonoBehaviour
             SceneManager.LoadSceneAsync("Win");
         }
     }
+
+    private void NotifySecondElapsed(object sender, ElapsedEventArgs e) => score = Mathf.Max(0, score + this.pointsPerSecond);
+
+    public void NotifyDeath() => score = Mathf.Max(0, score + this.pointPerDeath);
 
     private void SpawnBricks(bool clean = true)
     {
@@ -97,14 +103,9 @@ public class BricksManager : MonoBehaviour
         this.bricks.Clear();
     }
 
-    private void OnTimedEvent(object sender, ElapsedEventArgs e)
-    {
-        score = Mathf.Max(0, score + this.pointsPerSecond);
-    }
-
     private void OnDestroy()
     {
-        this.timer.Elapsed -= OnTimedEvent;
+        this.timer.Elapsed -= NotifySecondElapsed;
         this.timer.Stop();
         this.timer.Dispose();
     }

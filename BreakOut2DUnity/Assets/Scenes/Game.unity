@@ -983,6 +983,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 86681983}
+  bricksManager: {fileID: 713748946}
 --- !u!1 &1714308748
 GameObject:
   m_ObjectHideFlags: 0

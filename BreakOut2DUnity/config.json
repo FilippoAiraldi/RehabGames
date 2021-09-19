@@ -13,5 +13,6 @@
 	"MaxCollisionPredictionIters": 20,
 	
 	"PointsPerBlock": 10,
-	"PointsPerSecond": -0.2
+	"PointsPerSecond": -0.2,
+	"PointsPerDeath": -20
 }

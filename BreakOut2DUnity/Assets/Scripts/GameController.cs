@@ -54,7 +54,7 @@ public class GameController : MonoBehaviour
         s += this.server.IsClientConnected
              ? $"Command = {this.GetPaddleCommand():+0.0;-0.0;0.0}"
              : "No client connected.";
-        var font = new GUIStyle(GUI.skin.GetStyle("label")) { fontSize = 11 };
+        var font = new GUIStyle(GUI.skin.GetStyle("label")) { fontSize = 17 };
         GUI.Label(new Rect(6, Screen.height - 40, 300, 60), s, font);
     }
 

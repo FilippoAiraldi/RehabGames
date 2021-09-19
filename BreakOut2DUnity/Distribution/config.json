@@ -3,15 +3,16 @@
 	"TcpPort": 60000,
 	"TcpReadWriteIntervalMs": 25,
 	
-	"PaddleSpeed": 10,
-	"PaddleForce": 2,
-	"BallSpeed": 10,
-	"BallMaxRngStartAngle": 10,
+	"PaddleSpeed": 5,
+	"PaddleForce": 3,
+	"BallSpeed": 5,
+	"BallMaxRngStartAngle": 15,
 	
 	"BricksMargin": 0.25,
 	
 	"MaxCollisionPredictionIters": 20,
 	
 	"PointsPerBlock": 10,
-	"PointsPerSecond": -0.2
+	"PointsPerSecond": -0.2,
+	"PointsPerDeath": -20
 }
