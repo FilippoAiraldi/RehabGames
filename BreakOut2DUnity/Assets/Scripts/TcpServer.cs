@@ -19,6 +19,7 @@ public class TcpServer : MonoBehaviour
     public float PaddleActualPosition { get; set; } = 0f; // belongs to [0, 1] or -1
     public float PaddleDesiredPosition { get; set; } = 0f; // belongs to [0, 1] or -1
     public float BallDistanceFromPaddleDesiredPosition { get; set; } = 0f; // belongs to [0, 1] or -1
+    public float BallDistanceFromPaddleDesiredInversePositionWithDeadband { get; set; } = 0f; // belongs to [0, 1] or -1
     public bool IsClientConnected { get; private set; } = false;
 
     private static bool serverAlreadyLoaded = false;
@@ -41,7 +42,7 @@ public class TcpServer : MonoBehaviour
 
     private void Run(CancellationToken token)
     {
-        byte[] readBuffer = new byte[4], writeBuffer = new byte[12];
+        byte[] readBuffer = new byte[4], writeBuffer = new byte[16];
         this.listener = new TcpListener(IPAddress.Parse(this.address), this.port);
         this.listener.Start();
 
@@ -75,12 +76,15 @@ public class TcpServer : MonoBehaviour
                             var float1 = BitConverter.GetBytes(Mathf.Clamp01(this.PaddleActualPosition));
                             var float2 = BitConverter.GetBytes(Mathf.Clamp01(this.PaddleDesiredPosition));
                             var float3 = BitConverter.GetBytes(Mathf.Clamp01(this.BallDistanceFromPaddleDesiredPosition));
+                            var float4 = BitConverter.GetBytes(Mathf.Clamp01(this.BallDistanceFromPaddleDesiredInversePositionWithDeadband));
                             Array.Reverse(float1, 0, float1.Length);
                             Array.Reverse(float2, 0, float2.Length);
                             Array.Reverse(float3, 0, float3.Length);
+                            Array.Reverse(float4, 0, float4.Length);
                             Array.Copy(float1, 0, writeBuffer, 0, float1.Length);
                             Array.Copy(float2, 0, writeBuffer, float1.Length, float2.Length);
                             Array.Copy(float3, 0, writeBuffer, float1.Length + float2.Length, float3.Length);
+                            Array.Copy(float4, 0, writeBuffer, float1.Length + float2.Length + float3.Length, float4.Length);
                             stream.Write(writeBuffer, 0, writeBuffer.Length);
 
                             // go to sleep

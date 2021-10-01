@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 
 
@@ -14,6 +13,7 @@ public class CollisionManager : MonoBehaviour
     public GameObject rightWall;
 
     private float fieldWidth;
+    private float fieldHeight;
     private float fieldDiag;
     private int maxCollisionIterations; 
 
@@ -21,14 +21,15 @@ public class CollisionManager : MonoBehaviour
     {
         this.server = FindObjectOfType<TcpServer>();
         this.maxCollisionIterations = MenuManager.Config.MaxCollisionPredictionIters;
-        (this.fieldWidth, this.fieldDiag) = this.ComputeFieldDimensions();
+        (this.fieldWidth, this.fieldHeight, this.fieldDiag) = this.ComputeFieldDimensions();
     }
 
-    void Update() => 
-        (this.server.PaddleActualPosition, this.server.PaddleDesiredPosition, this.server.BallDistanceFromPaddleDesiredPosition)
-            = this.ComputePaddleActualAndDesiredPositionAndDistance();
+    void Update() => (this.server.PaddleActualPosition,
+                      this.server.PaddleDesiredPosition,
+                      this.server.BallDistanceFromPaddleDesiredPosition,
+                      this.server.BallDistanceFromPaddleDesiredInversePositionWithDeadband) = this.ComputePaddleActualAndDesiredPositionAndDistance();
 
-    public (float width, float diag) ComputeFieldDimensions()
+    public (float width, float height, float diag) ComputeFieldDimensions()
     {
         var w = this.rightWall.transform.position.x - this.leftWall.transform.position.x
             - (this.rightWall.transform.localScale.x + this.leftWall.transform.localScale.x) / 2f
@@ -37,17 +38,27 @@ public class CollisionManager : MonoBehaviour
             - (this.topWall.transform.localScale.y + this.paddle.transform.localScale.y) / 2f
             - this.ball.transform.localScale.x;
 
-        return (w, Mathf.Sqrt(w * w + h * h));
+        return (w, h, Mathf.Sqrt(w * w + h * h));
     }
 
     private float NormalizedPaddlePosition(float p) => 1f - (p / this.fieldWidth + 0.5f); // range [1, 0] left to right
 
-    private (float pos, float desPos, float normDist) ComputePaddleActualAndDesiredPositionAndDistance()
+    private (float pos, float desPos, float normDist, float invDist) ComputePaddleActualAndDesiredPositionAndDistance()
     {
         const int collidableLayerMask = 1 << 6;
 
+        // compute paddle position and the point where it will hit the paddle and the distance to it
         var paddlePos = this.NormalizedPaddlePosition(this.paddle.transform.position.x);
         var ballRadius = this.ball.transform.localScale.x / 2f;
+        var ballHittingPaddlePos = (Vector2)this.paddle.transform.position + new Vector2(0, this.paddle.transform.localScale.y / 2f + ballRadius);
+        var ballToPaddle = this.ball.position - ballHittingPaddlePos;
+        var dist = ballToPaddle.magnitude / this.fieldDiag;
+
+        // compute inverse y distance (1 - d) from ball to paddle pos taking into account the deadband
+        var deadFieldHeight = MenuManager.Config.DistanceDeadband * this.fieldHeight;
+        var invDist = this.ball.position.y - ballHittingPaddlePos.y > deadFieldHeight
+            ? 0f
+            : 1f - (this.ball.position.y - ballHittingPaddlePos.y) / deadFieldHeight;
 
         var start = this.ball.position;
         var dir = this.ball.velocity.normalized;
@@ -66,9 +77,7 @@ public class CollisionManager : MonoBehaviour
                     // from the hit centroid, extract the desired paddle position and the distance 
                     var xHit = Mathf.Clamp(hit.centroid.x, -this.fieldWidth / 2f, this.fieldWidth / 2f);
                     var paddleDesiredPos = this.NormalizedPaddlePosition(xHit);
-                    var ballHittingPaddlePos = (Vector2)this.paddle.transform.position + new Vector2(0, this.paddle.transform.localScale.y / 2f + ballRadius);
-                    var dist = (this.ball.position - ballHittingPaddlePos).magnitude / this.fieldDiag;
-                    return (paddlePos, paddleDesiredPos, dist);
+                    return (paddlePos, paddleDesiredPos, dist, invDist);
                 }
                 else
                 {
@@ -80,7 +89,7 @@ public class CollisionManager : MonoBehaviour
             }
         }
 
-        // no collision with baseline detected; return middle of screen with some magnitude
-        return (paddlePos, 0.5f, 0.5f);
+        // no collision with baseline detected; return the position itself of the paddle
+        return (paddlePos, paddlePos, dist, invDist);
     }
 }
